@@ -1,208 +1,245 @@
 
-# Documentation API de Test
+# Documentation des API 
 
-Ce document fournit une vue d'ensemble des différentes requêtes API que vous pouvez utiliser pour tester les différentes fonctionnalités de votre application. Vous trouverez des exemples de requêtes pour récupérer des données, créer, mettre à jour et supprimer des ressources, ainsi que des instructions pour les utiliser avec **curl** et **Postman**.
+## Table des matières
+- [Projet](#projet)
+  - [GET /projets](#get-projets)
+  - [POST /projets/add](#post-projets)
+- [Task](#task)
+  - [GET /tasks](#get-tasks)
+  - [POST /tasks/add](#post-tasks)
+- [User](#user)
+  - [GET /users](#get-users)
+  - [POST /users/add](#post-users)
+- [ProjetTaskCount](#projet-task-count)
+  - [GET /count](#get-count)
+  - [POST /count](#post-count)
 
----
+## Projet
 
-## Endpoints
+### GET /projets
+**URL**: `/projets`
 
-### 1. **Récupérer tous les projets paginés**
+**Méthode**: GET
 
-**URL :** `/projets?page=0&size=10`
+**Paramètres**:
+- `page`: numéro de la page (par défaut `0`)
+- `size`: nombre d'éléments par page (par défaut `5`)
 
-#### Description :
-Cette requête permet de récupérer une liste paginée de projets.
-
-#### Exemple avec `curl` :
+**Exemple de requête**:
 ```bash
-curl -X GET "http://localhost:8081/projets?page=0&size=10" -H "accept: application/json"
+curl -X GET "http://localhost:8081/projets?page=0&size=5"
 ```
 
-#### Exemple avec **Postman** :
-- **Méthode :** GET
-- **URL :** `http://localhost:8081/projets?page=0&size=10`
-- **Headers :** `accept: application/json`
-
----
-
-### 2. **Récupérer un projet par ID**
-
-**URL :** `/projets/{id}`
-
-#### Description :
-Récupère les informations d'un projet spécifique en utilisant son ID.
-
-#### Exemple avec `curl` :
-```bash
-curl -X GET "http://localhost:8081/projets/1" -H "accept: application/json"
-```
-
-#### Exemple avec **Postman** :
-- **Méthode :** GET
-- **URL :** `http://localhost:8081/projets/1`
-- **Headers :** `accept: application/json`
-
----
-
-### 3. **Créer un nouveau projet**
-
-**URL :** `/projets/add`
-
-#### Description :
-Crée un projet avec les informations spécifiées dans le corps de la requête.
-
-#### Exemple avec `curl` :
-```bash
-curl -X POST "http://localhost:8081/projets/add" -H "Content-Type: application/json" -d '{"name":"Nouveau Projet","description":"Description du projet"}'
-```
-
-#### Exemple avec **Postman** :
-- **Méthode :** POST
-- **URL :** `http://localhost:8081/projets/add`
-- **Headers :** `Content-Type: application/json`
-- **Body :**
-  ```json
+**Réponse**:
+```json
+[
   {
-    "name": "Nouveau Projet",
-    "description": "Description du projet"
-  }
-  ```
-
----
-
-### 4. **Mettre à jour un projet**
-
-**URL :** `/projets/{id}`
-
-#### Description :
-Met à jour un projet existant en fonction de son ID.
-
-#### Exemple avec `curl` :
-```bash
-curl -X PUT "http://localhost:8081/projets/1" -H "Content-Type: application/json" -d '{"name":"Projet Modifié","description":"Nouvelle description"}'
-```
-
-#### Exemple avec **Postman** :
-- **Méthode :** PUT
-- **URL :** `http://localhost:8081/projets/1`
-- **Headers :** `Content-Type: application/json`
-- **Body :**
-  ```json
+    "id": 1,
+    "name": "Projet 1",
+    "description": "Description du projet 1"
+  },
   {
-    "name": "Projet Modifié",
-    "description": "Nouvelle description"
+    "id": 2,
+    "name": "Projet 2",
+    "description": "Description du projet 2"
   }
-  ```
-
----
-
-### 5. **Supprimer un projet**
-
-**URL :** `/projets/{id}`
-
-#### Description :
-Supprime un projet en fonction de son ID.
-
-#### Exemple avec `curl` :
-```bash
-curl -X DELETE "http://localhost:8081/projets/1" -H "accept: application/json"
+]
 ```
 
-#### Exemple avec **Postman** :
-- **Méthode :** DELETE
-- **URL :** `http://localhost:8081/projets/1`
-- **Headers :** `accept: application/json`
+### POST /projets/add
+**URL**: `/projets/add`
 
----
+**Méthode**: POST
 
-### 6. **Récupérer les statistiques de comptage des tâches par projet (paginé)**
-
-**URL :** `/count/all?page=0&size=5`
-
-#### Description :
-Cette requête récupère une page de projets avec le nombre de tâches associées à chaque projet.
-
-#### Exemple avec `curl` :
-```bash
-curl -X GET "http://localhost:8081/count/all?page=0&size=5" -H "accept: application/json"
+**Body**:
+```json
+{
+  "name": "Nouveau Projet",
+  "description": "Description du nouveau projet"
+}
 ```
 
-#### Exemple avec **Postman** :
-- **Méthode :** GET
-- **URL :** `http://localhost:8081/count/all?page=0&size=5`
-- **Headers :** `accept: application/json`
-
----
-
-### 7. **Récupérer une tâche par ID**
-
-**URL :** `/tasks/{id}`
-
-#### Description :
-Récupère une tâche spécifique par son ID.
-
-#### Exemple avec `curl` :
+**Exemple de requête**:
 ```bash
-curl -X GET "http://localhost:8081/tasks/1" -H "accept: application/json"
+curl -X POST "http://localhost:8081/projets/add" -H "Content-Type: application/json" -d '{"name": "Nouveau Projet", "description": "Description du nouveau projet"}'
 ```
 
-#### Exemple avec **Postman** :
-- **Méthode :** GET
-- **URL :** `http://localhost:8081/tasks/1`
-- **Headers :** `accept: application/json`
-
----
-
-### 8. **Récupérer toutes les tâches par titre**
-
-**URL :** `/tasks/title/{title}?page=0&size=5`
-
-#### Description :
-Récupère une liste de tâches par leur titre. Utilisez la pagination pour limiter les résultats.
-
-#### Exemple avec `curl` :
-```bash
-curl -X GET "http://localhost:8081/tasks/title/TaskTitle?page=0&size=5" -H "accept: application/json"
+**Réponse**:
+```json
+{
+  "id": 3,
+  "name": "Nouveau Projet",
+  "description": "Description du nouveau projet"
+}
 ```
 
-#### Exemple avec **Postman** :
-- **Méthode :** GET
-- **URL :** `http://localhost:8081/tasks/title/TaskTitle?page=0&size=5`
-- **Headers :** `accept: application/json`
+## Task
 
----
+### GET /tasks
+**URL**: `/tasks`
 
-## Tester avec **Postman**
+**Méthode**: GET
 
-1. Téléchargez [Postman](https://www.postman.com/downloads/).
-2. Ouvrez Postman et créez une nouvelle requête avec la méthode HTTP appropriée (GET, POST, PUT, DELETE).
-3. Entrez l'URL de l'API.
-4. Configurez les en-têtes (headers) et le corps de la requête (body) si nécessaire.
-5. Cliquez sur "Send" pour envoyer la requête.
+**Paramètres**:
+- `page`: numéro de la page (par défaut `0`)
+- `size`: nombre d'éléments par page (par défaut `10`)
 
----
+**Exemple de requête**:
+```bash
+curl -X GET "http://localhost:8081/tasks?page=0&size=10"
+```
 
-## Tester avec **curl**
+**Réponse**:
+```json
+[
+  {
+    "id": 1,
+    "title": "Task 1",
+    "description": "Description de la tâche 1"
+  },
+  {
+    "id": 2,
+    "title": "Task 2",
+    "description": "Description de la tâche 2"
+  }
+]
+```
 
-1. Assurez-vous que `curl` est installé sur votre machine.
-2. Ouvrez un terminal.
-3. Entrez les commandes `curl` mentionnées ci-dessus pour tester chaque endpoint.
-4. Vous verrez les réponses directement dans votre terminal.
+### POST /tasks/add
+**URL**: `/tasks/add`
 
----
+**Méthode**: POST
 
-## Gestion du Cache
+**Body**:
+```json
+{
+  "title": "New Task",
+  "description": "New task description"
+}
+```
 
-Les endpoints utilisant le cache sont les suivants :
-- **`/tasks`** : Récupération paginée des tâches, cache activé.
-- **`/tasks/title/{title}`** : Recherche par titre, cache activé.
-- **`/tasks/{id}`** : Récupération par ID, cache activé.
+**Exemple de requête**:
+```bash
+curl -X POST "http://localhost:8081/tasks/add" -H "Content-Type: application/json" -d '{"title": "New Task", "description": "New task description"}'
+```
 
-Pour invalider le cache, toute modification (création, mise à jour, suppression) d'une tâche ou d'un projet entraîne l'effacement du cache.
+**Réponse**:
+```json
+{
+  "id": 3,
+  "title": "New Task",
+  "description": "New task description"
+}
+```
 
----
+## User
+
+### GET /users
+**URL**: `/users`
+
+**Méthode**: GET
+
+**Paramètres**:
+- `page`: numéro de la page (par défaut `0`)
+- `size`: nombre d'éléments par page (par défaut `5`)
+
+**Exemple de requête**:
+```bash
+curl -X GET "http://localhost:8081/users?page=0&size=5"
+```
+
+**Réponse**:
+```json
+[
+  {
+    "id": 1,
+    "name": "User 1",
+    "email": "user1@example.com"
+  },
+  {
+    "id": 2,
+    "name": "User 2",
+    "email": "user2@example.com"
+  }
+]
+```
+
+### POST /users/add
+**URL**: `/users/add`
+
+**Méthode**: POST
+
+**Body**:
+```json
+{
+  "name": "New User",
+  "email": "newuser@example.com"
+}
+```
+
+**Exemple de requête**:
+```bash
+curl -X POST "http://localhost:8081/users/add" -H "Content-Type: application/json" -d '{"name": "New User", "email": "newuser@example.com"}'
+```
+
+**Réponse**:
+```json
+{
+  "id": 3,
+  "name": "New User",
+  "email": "newuser@example.com"
+}
+```
+
+## ProjetTaskCount
+
+### GET /count
+**URL**: `/count`
+
+**Méthode**: GET
+
+**Paramètres**:
+- `page`: numéro de la page (par défaut `0`)
+- `size`: nombre d'éléments par page (par défaut `5`)
+
+**Exemple de requête**:
+```bash
+curl -X GET "http://localhost:8081/count?page=0&size=5"
+```
+
+**Réponse**:
+```json
+[
+  {
+    "projet_id": 1,
+    "name": "Projet 1",
+    "taskCount": 3
+  },
+  {
+    "projet_id": 2,
+    "name": "Projet 2",
+    "taskCount": 5
+  }
+]
+```
+
+### POST /count
+**URL**: `/count`
+
+**Méthode**: POST
+
+**Exemple de requête**:
+```bash
+curl -X POST "http://localhost:8081/count" -H "Content-Type: application/json" -d '{}'
+```
+
+**Réponse**:
+```json
+{
+  "message": "Materialized view refreshed successfully."
+}
+```
 
 ## Conclusion
-
-Ces tests vous permettent de valider toutes les fonctionnalités de votre API avec pagination, mise à jour, création et suppression des ressources, ainsi que la gestion du cache pour améliorer les performances. N'oubliez pas d'ajuster les paramètres (comme `page` et `size`) selon vos besoins pour tester différentes tailles de page.
+Ces tests permettent de valider les différentes routes pour chaque entité et de tester les requêtes paginées ainsi que les opérations CRUD.
